@@ -1,22 +1,42 @@
-# 15654 N과 M (5)
+# 15654 N과 M(5)
+# 4 2
+# 9 8 7 1
 
-# 2. 백트래킹 함수
-def dfs(depth):
-    if depth == m:
-        print(*lst)
-        return
-    
-    for i in range(n):
-        if n_lst[i] in lst:
-            continue
-        lst.append(n_lst[i])
-        dfs(depth+1)
-        lst.pop()
-    return
+# 1 7
+# 1 8
+# 1 9
+# 7 1
+# 7 8
+# 7 9
+# 8 1
+# 8 7
+# 8 9
+# 9 1
+# 9 7
+# 9 8
+from itertools import permutations
 
-# 1. 입력 받기
 n,m = map(int,input().split())
-n_lst = sorted(list(map(int,input().split())))
-lst = []
-# 3. 백트래킹으로 순회
-dfs(0)
+lst = sorted(list(map(int,input().split())))
+
+answer = list(permutations(lst,m))
+for a in answer:
+    print(*a)
+
+# def dfs(depth):
+#     if depth == m:
+#         print(*answer)
+#         return
+    
+#     for i in range(n):
+#         if lst[i] not in answer:
+#             answer.append(lst[i])
+#             dfs(depth+1)
+#             answer.pop()
+#     return
+
+# n,m = map(int,input().split())
+# lst = sorted(list(map(int,input().split())))
+# answer = []
+
+# dfs(0)
