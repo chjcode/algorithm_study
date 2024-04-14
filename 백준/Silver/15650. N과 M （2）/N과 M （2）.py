@@ -1,25 +1,15 @@
-# 15650 N과 M(2)
-# 4 2
 
-# 1 2
-# 1 3
-# 1 4
-# 2 3
-# 2 4
-# 3 4
-
-def dfs(start):
-    if len(lst) == m:
-        print(*lst)
+def dfs(n,s,lst):
+    if n == M:
+        ans.append(lst)
         return
     
-    for i in range(start,n+1):
-        if i not in lst:
-            lst.append(i)
-            dfs(i+1)
-            lst.pop()
-    return
+    for j in range(s,N+1):
+        dfs(n+1,j+1,lst+[j])
 
-n,m = map(int,input().split())
-lst = []
-dfs(1)
+N,M = map(int,input().split())
+ans = []
+dfs(0,1,[])
+
+for lst in ans:
+    print(*lst)
