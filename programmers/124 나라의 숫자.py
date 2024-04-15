@@ -28,25 +28,3 @@ def solution(n):
         answer = country124[idx] + answer
 
     return answer
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
