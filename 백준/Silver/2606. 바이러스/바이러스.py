@@ -1,4 +1,6 @@
 # 2606 바이러스
+import sys
+input = sys.stdin.readline
 
 def dfs(x):
     visited[x] = True
