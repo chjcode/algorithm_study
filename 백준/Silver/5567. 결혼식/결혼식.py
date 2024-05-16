@@ -1,32 +1,33 @@
-from collections import deque
+# 5567 결혼식
 
-def bfs():
+from collections import deque
+import sys
+input = sys.stdin.readline
+
+def bfs(x):
     deq = deque()
-    deq.append([1,0])
-    visit[1] = True
+    deq.append((x,0))
+    visit[x] = True
 
     while deq:
-        x, cnt = deq.popleft()
+        x,cnt = deq.popleft()
         if cnt == 2:
             continue
-        for i in graph[x]:
-            if visit[i] == False:
-                deq.append([i,cnt+1])
-                visit[i] = True
-                
+        for node in graph[x]:
+            if not visit[node]:
+                visit[node] = True
+                deq.append((node,cnt+1))
+
     return
 
 n = int(input())
 m = int(input())
-
-# 친구와 친구의 친구까지 초대
 graph = [[] for _ in range(n+1)]
 visit = [False for _ in range(n+1)]
-for i in range(m):
+for _ in range(m):
     u,v = map(int,input().split())
     graph[u].append(v)
     graph[v].append(u)
 
-bfs()
-# print(visit)
+bfs(1)
 print(visit.count(True)-1)
