@@ -26,11 +26,11 @@ public class Main {
 		
 		deq = new ArrayDeque<>();
 		for (int i = 0; i < n; i++) {
-			while (!deq.isEmpty() && arr[deq.peek()] < arr[i]) {
-				arr[deq.poll()] = arr[i];
+			while (!deq.isEmpty() && arr[deq.peekLast()] < arr[i]) {
+				arr[deq.pollLast()] = arr[i];
 			}
 			
-			deq.push(i);
+			deq.add(i);
 		}
 		
 		
