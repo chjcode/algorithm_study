@@ -1,6 +1,6 @@
 
 import java.util.*;
-import java.util.Scanner;
+import java.io.*;
 
 public class Main {
 
@@ -16,12 +16,13 @@ public class Main {
 
     static int n;
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        int T = scanner.nextInt();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int T = Integer.parseInt(br.readLine());
 
         for (int t = 0; t < T; t++) {
-            n = scanner.nextInt();
+            n = Integer.parseInt(br.readLine());
             System.out.println(findMultiple());
         }
     }
