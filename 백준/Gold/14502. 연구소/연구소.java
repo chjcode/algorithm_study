@@ -2,14 +2,17 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
 	
-	static int n,m, maxCnt;
+	static int n,m, maxCnt,safeAreaCnt;
 	static int[][] graph;
 	static Deque<Point> virus;
+	static List<Point> empty;
 	static int[] dx = {0,0,1,-1};
 	static int[] dy = {1,-1,0,0};
 	
@@ -39,10 +42,16 @@ public class Main {
 			}
 		}
 		
-		
+		// 바이러스 위치 저장, 안전 영역 개수 저장
 		virus = new ArrayDeque<>();
+		empty = new ArrayList<>();
+		safeAreaCnt = -3;
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
+				if (graph[i][j] == 0) {
+					safeAreaCnt++;
+					empty.add(new Point(i,j));
+				}
 				if (graph[i][j] == 2) {
 					virus.addLast(new Point(i,j));
 				}
@@ -51,28 +60,25 @@ public class Main {
 		
 		
 		maxCnt = 0;
-		dfs(0);
+		dfs(0,0);
 		
 		System.out.println(maxCnt);
 		
 	}
 	
-	private static void dfs(int depth) {
+	private static void dfs(int depth, int start) {
 		if (depth == 3) {
 			bfs();
 			return;
 		}
 		
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-	
-				if (graph[i][j] == 0) {
-					graph[i][j] = 1;
-					dfs(depth+1);
-					graph[i][j] = 0;
-				}
-			}
+		for (int i = start; i < empty.size(); i++) {
+			Point point = empty.get(i);
+			graph[point.x][point.y] = 1;
+			dfs(depth+1, i+1);
+			graph[point.x][point.y]= 0; 
 		}
+		
 		return;
 	}
 	
@@ -86,6 +92,7 @@ public class Main {
 			tempGraph[i] = graph[i].clone();
 		}
 		
+		int virusAreaCnt = 0;
 		while (!deq.isEmpty()) {
 			Point point = deq.poll();
 			for (int i = 0; i < 4; i++) {
@@ -99,19 +106,11 @@ public class Main {
 				if (tempGraph[nx][ny] == 0) {
 					deq.addLast(new Point(nx,ny));
 					tempGraph[nx][ny] = 2;
+					virusAreaCnt++;
 				}
 			}
 		}
-		
-		int count = 0;
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-				if (tempGraph[i][j] == 0) {
-					count++;
-				}
-			}
-		}
-		maxCnt = Math.max(maxCnt, count);
+		maxCnt = Math.max(maxCnt, safeAreaCnt-virusAreaCnt);
 	}
 
 }
