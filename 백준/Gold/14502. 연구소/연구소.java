@@ -9,6 +9,7 @@ public class Main {
 	
 	static int n,m, maxCnt;
 	static int[][] graph;
+	static Deque<Point> virus;
 	static int[] dx = {0,0,1,-1};
 	static int[] dy = {1,-1,0,0};
 	
@@ -38,6 +39,17 @@ public class Main {
 			}
 		}
 		
+		
+		virus = new ArrayDeque<>();
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				if (graph[i][j] == 2) {
+					virus.addLast(new Point(i,j));
+				}
+			}
+		}
+		
+		
 		maxCnt = 0;
 		dfs(0);
 		
@@ -66,17 +78,9 @@ public class Main {
 	
 	
 	private static void bfs() {
-		Deque<Point> deq = new ArrayDeque<>();
+		Deque<Point> deq = new ArrayDeque<>(virus);
 		
 		int[][] tempGraph = new int[n][m];
-		
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < m; j++) {
-				if (graph[i][j] == 2) {
-					deq.addLast(new Point(i,j));
-				}
-			}
-		}
 		
 		for (int i = 0; i < n; i++) {
 			tempGraph[i] = graph[i].clone();
