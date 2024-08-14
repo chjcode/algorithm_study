@@ -47,10 +47,12 @@ public class Solution {
 	}
 	
 	private static void combination(int start,int cnt, int totalKal, int totalTaste) {
-//		if (cnt == n) {
-//			return;
-//		}
 		if (totalKal > l) {
+			return;
+		}
+		
+		if (cnt == n) {
+			answer = Math.max(answer, totalTaste);
 			return;
 		}
 		answer = Math.max(answer, totalTaste);
