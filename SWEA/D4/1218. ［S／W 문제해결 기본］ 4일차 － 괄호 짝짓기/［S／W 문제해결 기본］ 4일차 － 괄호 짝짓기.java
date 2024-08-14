@@ -17,13 +17,13 @@ public class Solution {
             for (char l : lst.toCharArray()) {
                 if (l == '(' || l == '{' || l == '[' || l == '<') {
                 	deq.addLast(l);
-                } else if (l == ')' && deq.size() > 0 && deq.peekLast() == '(') {
+                } else if (l == ')' && deq.peekLast() == '(') {
                 	deq.pollLast();
-                } else if (l == '}' && deq.size() > 0 && deq.peekLast() == '{') {
+                } else if (l == '}' && deq.peekLast() == '{') {
                 	deq.pollLast();
-                } else if (l == ']' && deq.size() > 0 && deq.peekLast() == '[') {
+                } else if (l == ']' && deq.peekLast() == '[') {
                 	deq.pollLast();
-                } else if (l == '>' && deq.size() > 0 && deq.peekLast() == '<') {
+                } else if (l == '>' && deq.peekLast() == '<') {
                 	deq.pollLast();
                 } else {
                     answer = 0;
