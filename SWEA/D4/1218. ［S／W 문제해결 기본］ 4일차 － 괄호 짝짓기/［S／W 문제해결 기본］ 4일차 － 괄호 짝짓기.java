@@ -12,19 +12,19 @@ public class Solution {
             int n = Integer.parseInt(br.readLine());
             String lst = br.readLine();
             int answer = 1;
-            StringBuilder sb = new StringBuilder();
+            Deque<Character> deq = new ArrayDeque<>();
 
             for (char l : lst.toCharArray()) {
                 if (l == '(' || l == '{' || l == '[' || l == '<') {
-                    sb.append(l);
-                } else if (l == ')' && sb.length() > 0 && sb.charAt(sb.length() - 1) == '(') {
-                    sb.deleteCharAt(sb.length() - 1);
-                } else if (l == '}' && sb.length() > 0 && sb.charAt(sb.length() - 1) == '{') {
-                    sb.deleteCharAt(sb.length() - 1);
-                } else if (l == ']' && sb.length() > 0 && sb.charAt(sb.length() - 1) == '[') {
-                    sb.deleteCharAt(sb.length() - 1);
-                } else if (l == '>' && sb.length() > 0 && sb.charAt(sb.length() - 1) == '<') {
-                    sb.deleteCharAt(sb.length() - 1);
+                	deq.addLast(l);
+                } else if (l == ')' && deq.size() > 0 && deq.peekLast() == '(') {
+                	deq.pollLast();
+                } else if (l == '}' && deq.size() > 0 && deq.peekLast() == '{') {
+                	deq.pollLast();
+                } else if (l == ']' && deq.size() > 0 && deq.peekLast() == '[') {
+                	deq.pollLast();
+                } else if (l == '>' && deq.size() > 0 && deq.peekLast() == '<') {
+                	deq.pollLast();
                 } else {
                     answer = 0;
                     break;
