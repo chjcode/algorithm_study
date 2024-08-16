@@ -1,12 +1,11 @@
-
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.io.*;
 
 public class Solution {
-
-	static int n, l,t,k,answer;
-	static List<Hamburger> lst, comLst;
+	
+	static int n,l,answer;
+	static List<Hamburger> lst;
+	
 	static class Hamburger{
 		int t;
 		int k;
@@ -19,10 +18,10 @@ public class Solution {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
-
-		int T = Integer.parseInt(br.readLine());
-
-		for (int tc = 1; tc < T + 1; tc++) {
+		
+		int t = Integer.parseInt(br.readLine());
+		
+		for (int tc = 1; tc < t+1; tc++) {
 			st = new StringTokenizer(br.readLine());
 			n = Integer.parseInt(st.nextToken());
 			l = Integer.parseInt(st.nextToken());
@@ -30,35 +29,38 @@ public class Solution {
 			lst = new ArrayList<>();
 			for (int i = 0; i < n; i++) {
 				st = new StringTokenizer(br.readLine());
-				t = Integer.parseInt(st.nextToken());
-				k = Integer.parseInt(st.nextToken());
+				int taste = Integer.parseInt(st.nextToken());
+				int kal = Integer.parseInt(st.nextToken());
 				
-				lst.add(new Hamburger(t, k));
+				lst.add(new Hamburger(taste, kal));
 			}
 			
-
 			answer = 0;
-			comLst = new ArrayList<>();
-			combination(0,0,0,0);
+			
+			for (int i = 0; i < (1<<n); i++) {
+				int totalK = 0;
+				int totalT = 0;
+				boolean flag = true;
+				for (int j = 0; j < n; j++) {
+					if ((i & (1<<j)) != 0) {
+						totalK += lst.get(j).k;
+						totalT += lst.get(j).t;
+					}
+					
+					if (totalK > l) {
+						flag = false;
+						break;
+					}
+				}
+				if (flag) {
+					answer = Math.max(answer, totalT);
+				}
+			}
 			
 			System.out.println("#" + tc + " " + answer);
 		}
-
-	}
-	
-	private static void combination(int start,int cnt, int totalKal, int totalTaste) {
-		if (totalKal > l) {
-			return;
-		}
 		
-		if (cnt == n) {
-			answer = Math.max(answer, totalTaste);
-			return;
-		}
-		answer = Math.max(answer, totalTaste);
-	
-		for (int i = start; i < n; i++) {
-			combination(i+1,cnt+1,totalKal+lst.get(i).k, totalTaste+lst.get(i).t);
-		}
+		
 	}
+
 }
