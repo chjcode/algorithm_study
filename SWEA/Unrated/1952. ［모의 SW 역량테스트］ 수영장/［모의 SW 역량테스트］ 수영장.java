@@ -4,8 +4,8 @@ import java.io.*;
 
 public class Solution {
 	
-	static int total,oneDayPass,oneMonthPass,threeMonthPass,oneYearPass;
-	static int[] charge, plan,monthPass;
+	static int total,dayPass,monthPass,threeMonthPass,yearPass;
+	static int[] plan;
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -15,11 +15,12 @@ public class Solution {
 		int t = Integer.parseInt(br.readLine());
 		
 		for (int tc = 1; tc < t+1; tc++) {
-			charge = new int[4];
+
 			st = new StringTokenizer(br.readLine());
-			for (int i = 0; i < 4; i++) {
-				charge[i] = Integer.parseInt(st.nextToken());
-			}
+			dayPass = Integer.parseInt(st.nextToken());
+			monthPass = Integer.parseInt(st.nextToken());
+			threeMonthPass = Integer.parseInt(st.nextToken());
+			yearPass = Integer.parseInt(st.nextToken());
 			
 			plan = new int[12];
 			st = new StringTokenizer(br.readLine());
@@ -27,12 +28,7 @@ public class Solution {
 				plan[i] = Integer.parseInt(st.nextToken());
 			}
 			
-			oneDayPass = charge[0];
-			oneMonthPass = charge[1];
-			threeMonthPass = charge[2];
-			oneYearPass = charge[3];
-			
-			total = oneYearPass;
+			total = yearPass;
 			dfs(0,0);
 			
 			System.out.println("#" + tc + " " + total);
@@ -47,12 +43,12 @@ public class Solution {
 			return;
 		}
 		
-		if (plan[depth] > 0) {
-			dfs(depth+1, cnt+oneDayPass*plan[depth]);
-			dfs(depth+1, cnt+ oneMonthPass);
-			dfs(depth+3, cnt+threeMonthPass);	
-		}else {
+		if (plan[depth] == 0) {
 			dfs(depth+1,cnt);
+		}else {
+			dfs(depth+1, cnt+dayPass*plan[depth]);
+			dfs(depth+1, cnt+ monthPass);
+			dfs(depth+3, cnt+threeMonthPass);	
 		}
 		
 	}
