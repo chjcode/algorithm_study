@@ -2,34 +2,30 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-	
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		
-		int n = Integer.parseInt(br.readLine());
-		int[] nArr = new int[n];
-		st = new StringTokenizer(br.readLine());
-		for (int i = 0; i < n; i++) {
-			nArr[i] = Integer.parseInt(st.nextToken());
-		}
-		Arrays.sort(nArr);
-		
-		int m = Integer.parseInt(br.readLine());
+    static int n,m;
+    static int[] arrN,arrM;
 
-		st = new StringTokenizer(br.readLine());
-		int answer = 0;
-		for (int i = 0; i < m; i++) {
-			int target = Integer.parseInt(st.nextToken());
-			int temp = Arrays.binarySearch(nArr, target);
-			if (temp >= 0) {
-				answer = 1;
-			}else {
-				answer = 0;
-			}
-			
-			System.out.println(answer); 
-		}	
-	}
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
 
+        n = Integer.parseInt(br.readLine());
+        arrN = new int[n];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            arrN[i] = Integer.parseInt(st.nextToken());
+        }
+        Arrays.sort(arrN);
+
+        m = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0 ; i< m; i++) {
+            int temp = Arrays.binarySearch(arrN,Integer.parseInt(st.nextToken()));
+            if (temp >= 0) {
+                System.out.println(1);
+            } else {
+                System.out.println(0);
+            }
+        }
+    }
 }
