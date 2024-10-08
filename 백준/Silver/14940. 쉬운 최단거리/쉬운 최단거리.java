@@ -1,3 +1,4 @@
+
 import java.util.*;
 import java.io.*;
 
@@ -57,14 +58,15 @@ public class Main {
             if (flag) break;
         }
 
-
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                System.out.print(visited[i][j] + " ");
+                sb.append(visited[i][j]).append(" ");
             }
-            System.out.println();
+            sb.append("\n");
         }
 
+        System.out.println(sb);
     }
 
     private static void bfs(int x,int y) {
