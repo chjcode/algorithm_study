@@ -3,43 +3,42 @@ import java.io.*;
 
 public class Main {
 
-    static int n,m, card;
-    static int[] cards;
+    static int n,m;
+    static int[] graph;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
         n = Integer.parseInt(br.readLine());
-        cards = new int[n];
+        graph = new int[n];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
-            cards[i] = Integer.parseInt(st.nextToken());
+            graph[i] = Integer.parseInt(st.nextToken());
         }
-        Arrays.sort(cards);
+        Arrays.sort(graph);
 
         m = Integer.parseInt(br.readLine());
-        st = new StringTokenizer(br.readLine());
         StringBuilder sb = new StringBuilder();
+        st = new StringTokenizer(br.readLine());
         for (int i = 0; i < m; i++) {
-            card =  Integer.parseInt(st.nextToken());
-            int count = upperBound(card) - lowerBound(card);
+            int card = Integer.parseInt(st.nextToken());
+            // count = upperbound index - lowerbound index
+            int count = upperbound(card) - lowerbound(card);
             sb.append(count).append(" ");
-
         }
-
-        System.out.println(sb.toString());
+        System.out.println(sb);
     }
 
-    private static int lowerBound(int num) {
+    private static int upperbound(int card) {
         int left = 0;
-        int right = cards.length;
+        int right = graph.length;
 
         while (left < right) {
             int mid = (left + right) / 2;
-            if (cards[mid] < num) {
+            if (graph[mid] <= card) {
                 left = mid + 1;
-            }else {
+            } else {
                 right = mid;
             }
         }
@@ -47,16 +46,16 @@ public class Main {
         return left;
     }
 
-    private static int upperBound(int num) {
+    private static int lowerbound(int card) {
         int left = 0;
-        int right = cards.length;
+        int right = graph.length;
 
         while (left < right) {
             int mid = (left + right) / 2;
-            if (cards[mid] <= num) {
-                left = mid + 1;
-            }else {
+            if (graph[mid] >= card) {
                 right = mid;
+            } else {
+                left = mid+1;
             }
         }
 
