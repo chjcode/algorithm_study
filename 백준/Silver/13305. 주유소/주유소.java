@@ -1,4 +1,3 @@
-
 import java.util.*;
 import java.io.*;
 
@@ -7,7 +6,7 @@ public class Main {
     static int n;
     static long answer;
 
-    static int[] len, cost;
+    static long[] len, cost;
 
 
     public static void main(String args[]) throws Exception {
@@ -18,19 +17,19 @@ public class Main {
         StringTokenizer st;
 
         n = Integer.parseInt(br.readLine());
-        len = new int[n];
+        len = new long[n-1];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n-1; i++) {
-            len[i] = Integer.parseInt(st.nextToken());
+            len[i] = Long.parseLong(st.nextToken());
         }
-        cost = new int[n];
+        cost = new long[n];
         st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
-            cost[i] = Integer.parseInt(st.nextToken());
+            cost[i] = Long.parseLong(st.nextToken());
         }
 
-        int stack = cost[0];
-        answer = cost[0] * len[0];
+        long stack = cost[0];
+        answer = stack * len[0];
         for (int i = 1; i < n-1; i++) {
             if (cost[i] < stack) {
                 stack = cost[i];
