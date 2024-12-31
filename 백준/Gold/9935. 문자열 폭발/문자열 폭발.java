@@ -3,49 +3,47 @@ import java.io.*;
 
 public class Main {
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
-		
-		String s = br.readLine();
-		int sLen = s.length();
-		String bomb = br.readLine();
-		int bLen = bomb.length();
-		
-		Stack<Character> stack = new Stack<>();
-		
-		for (int i = 0; i < sLen; i++) {
-			stack.push(s.charAt(i));
-			
-			if (stack.size() >= bLen) {
-				
-				boolean flag = true;
-				for (int j = 0; j < bLen; j++) {
-					if (stack.get(stack.size() - bLen + j) != bomb.charAt(j)) {
-						flag = false;
-						break;
-					}
-				}
-				
-				if (flag) {
-					for (int j = 0; j < bLen; j++) {
-						stack.pop();
-					}
-				}
-			}
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		if (stack.isEmpty()) {
-			System.out.println("FRULA");
-		} else {
-			for (char c : stack) {
-				sb.append(c);
-			}
-		}
-		
-		System.out.println(sb);
-		
-	}
+    static String s, bomb;
+    static int bLen;
+    static ArrayList<Character> list;
 
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        s = br.readLine();
+        bomb = br.readLine();
+        bLen = bomb.length();
+
+        list = new ArrayList<>();
+        for (int i = 0; i < s.length(); i++) {
+            list.add(s.charAt(i));
+
+            if (list.size() >= bLen) {
+                boolean flag = true;
+                for (int j = 0; j < bLen; j++) {
+                    if (list.get(list.size() - bLen + j) != bomb.charAt(j)) {
+                        flag = false;
+                        break;
+                    }
+                }
+
+                if (flag) {
+                    for (int j = 0; j < bLen; j++) {
+                        list.remove(list.size() - 1);
+                    }
+                }
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (list.isEmpty()) {
+            System.out.println("FRULA");
+        } else {
+            for (char c : list) {
+                sb.append(c);
+            }
+        }
+
+        System.out.println(sb);
+    }
 }
