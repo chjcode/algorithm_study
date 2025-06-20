@@ -1,49 +1,38 @@
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	
-	static int n;
-	static int[] arr;
-	static Deque<Integer> deq;
-	
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        
+        int n = Integer.parseInt(br.readLine());
+        
+        int[] arr = new int[n];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+        
+        Deque<Integer> deq = new ArrayDeque<>();
+        int[] answer = new int[n];
+        for (int i = 0; i < n; i++) {
+            while (!deq.isEmpty() && arr[deq.peekLast()] < arr[i]) {
+                answer[deq.pollLast()] = arr[i];
+            }
+            
+            deq.add(i);
+        }
+        
+        while (!deq.isEmpty()) {
+            answer[deq.pollLast()] = -1;
+        }
 
-		n = Integer.parseInt(br.readLine());
-		arr = new int[n];
-		
-		st = new StringTokenizer(br.readLine());
-		for(int i = 0; i < n; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-		}
-		
-		deq = new ArrayDeque<>();
-		for (int i = 0; i < n; i++) {
-			while (!deq.isEmpty() && arr[deq.peekLast()] < arr[i]) {
-				arr[deq.pollLast()] = arr[i];
-			}
-			
-			deq.add(i);
-		}
-		
-		
-		while (!deq.isEmpty()) {
-			arr[deq.poll()] = -1;
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < n; i++) {
-			sb.append(arr[i]).append(' ');
-		}
-		
-		System.out.println(sb);
-	}
-
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++) {
+            sb.append(answer[i]).append(' ');
+        }
+        
+        System.out.println(sb.toString());
+    }
 }
