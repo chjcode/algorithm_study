@@ -4,7 +4,7 @@ import java.io.*;
 public class Main {
     
     static List<List<Integer>> graph;
-    static final int INF = 1_000_000;
+    static final int INF = 100_000_000;
     
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -33,6 +33,17 @@ public class Main {
             dist[u][v] = 1;
             dist[v][u] = 1;
         }
+        
+        for (int k = 1; k < n+1; k++) {
+            for (int i = 1; i < n+1; i++) {
+                for (int j = 1; j < n+1; j++) {
+                    if (dist[i][j] > dist[i][k] + dist[k][j]) {
+                        dist[i][j] = dist[i][k] + dist[k][j];
+                    }
+                }
+            }
+        }
+        
         
         int answerU = 1;
         int answerV = 2;
