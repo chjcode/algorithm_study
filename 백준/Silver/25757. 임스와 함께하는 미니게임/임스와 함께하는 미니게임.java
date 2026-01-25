@@ -5,15 +5,14 @@ public class Main {
 
     static int n,playerNum;
     static char game;
-
-    static Set<String> player;
+    static Set<String> player = new HashSet<>();
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
         st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());  // 임스와 같이 플레이 하기를 신청한 횟수
+        n = Integer.parseInt(st.nextToken());
         game = st.nextToken().charAt(0);
 
         playerNum = 0;
@@ -25,12 +24,10 @@ public class Main {
             playerNum = 4;
         }
 
-        player = new HashSet<>();
         for (int i = 0; i < n; i++) {
             player.add(br.readLine());
         }
-
+        
         System.out.println(player.size()/(playerNum-1));
-
     }
 }
