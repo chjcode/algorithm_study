@@ -2,80 +2,82 @@ import java.util.*;
 import java.io.*;
 
 public class Main {
-    static int n,d,c, a,b,s,cnt,time;
-    static int[] visited;
-    static List<List<Node>> computer;
 
-    static class Node implements Comparable<Node>{
+    static class Node implements Comparable<Node> {
         int idx;
-        int time;
-        Node(int idx, int time) {
+        int cost;
+        Node(int idx, int cost) {
             this.idx = idx;
-            this.time = time;
+            this.cost = cost;
         }
 
         @Override
         public int compareTo(Node n) {
-            return this.time - n.time;
+            return Integer.compare(this.cost, n.cost);
         }
     }
+
+    static List<List<Node>> lst;
+    static final int INF = 1_000_000_000;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
 
         int t = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
 
         for (int tc = 0; tc < t; tc++) {
             st = new StringTokenizer(br.readLine());
-            n = Integer.parseInt(st.nextToken());   // 컴퓨터 개수
-            d = Integer.parseInt(st.nextToken());   // 의존성 개수
-            c = Integer.parseInt(st.nextToken());   // 해킹당한 컴퓨터의 번호
+            int n = Integer.parseInt(st.nextToken()); // 컴퓨터 개수
+            int d = Integer.parseInt(st.nextToken()); // 의존성 개수
+            int c = Integer.parseInt(st.nextToken()); // 시작(해킹당한) 컴퓨터
 
-            computer = new ArrayList<>();
-            for (int i = 0; i < n+1; i++) {
-                computer.add(new ArrayList<>());
-            }
+            lst = new ArrayList<>();
+            for (int i = 0; i <= n; i++) lst.add(new ArrayList<>());
 
             for (int i = 0; i < d; i++) {
                 st = new StringTokenizer(br.readLine());
-                a = Integer.parseInt(st.nextToken());
-                b = Integer.parseInt(st.nextToken());
-                s = Integer.parseInt(st.nextToken());
+                int a = Integer.parseInt(st.nextToken());
+                int b = Integer.parseInt(st.nextToken());
+                int s = Integer.parseInt(st.nextToken());
 
-                computer.get(b).add(new Node(a, s));
-
+                lst.get(b).add(new Node(a, s));
             }
 
-            visited = new int[n+1];
-            Arrays.fill(visited, Integer.MAX_VALUE);
+            int[] dist = new int[n + 1];
+            Arrays.fill(dist, INF);
+            dist[c] = 0;
 
             PriorityQueue<Node> pq = new PriorityQueue<>();
-            pq.add(new Node(c,0));
-            visited[c] = 0;
+            pq.offer(new Node(c, 0));
 
-            cnt = 0;
-            time = 0;
+            while (!pq.isEmpty()) {
+                Node cur = pq.poll();
 
-            while(!pq.isEmpty()) {
-                Node now = pq.poll();
-                if (visited[now.idx] < now.time) continue;
+                if (cur.cost != dist[cur.idx]) continue;
 
-                cnt++;
-                time = Math.max(time, now.time);
-
-                for (Node next : computer.get(now.idx)) {
-                    int timeSum = now.time + next.time;
-                    if (timeSum < visited[next.idx]) {
-                        visited[next.idx] = timeSum;
-                        pq.add(new Node(next.idx, timeSum));
+                for (Node next : lst.get(cur.idx)) {
+                    int nd = cur.cost + next.cost;
+                    if (nd < dist[next.idx]) {
+                        dist[next.idx] = nd;
+                        pq.offer(new Node(next.idx, nd));
                     }
                 }
             }
 
-            System.out.println(cnt + " " + time);
+            int computer = 0;
+            int maxTime = 0;
+            for (int i = 1; i <= n; i++) {
+                if (dist[i] != INF) {
+                    computer++;
+                    if (dist[i] > maxTime) maxTime = dist[i];
+                }
+            }
+
+            sb.append(computer).append(' ').append(maxTime).append('\n');
         }
+
+        System.out.print(sb.toString());
     }
-
-
 }
