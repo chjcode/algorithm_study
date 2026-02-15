@@ -1,59 +1,53 @@
 import java.util.*;
 
 class Solution {
+    
+    public boolean check(int schedule, int time) {
+        if (time <= schedule) return true;
+        
+        // schedule 958 time 1008
+        
+        int sMinute = schedule % 100;
+        int sHour = schedule / 100;
+        int tMinute = time % 100;
+        int tHour = time / 100;
+        
+        int s = sHour * 60 + sMinute;
+        int t = tHour * 60 + tMinute;
+        
+        return t <= s + 10;
+        
+    }
+    
     public int solution(int[] schedules, int[][] timelogs, int startday) {
-        // 출근 희망 시각과 실제로 출근한 기록을 바탕으로 상품을 받을 직원 수
-        // 상품 -> 지각 안한사람 상품
-        int answer = 0;
-        int n = schedules.length;
-
+        
+        //상품 받을 인원 수 구하기
+        // 10분 늦는건 ㄱㅊ
+        
+        int n = schedules.length; // 직원 수
+        
+        int cnt = 0;    // 인원 수 세는 변수
         for (int i = 0; i < n; i++) {
-            int schedule = schedules[i];
-            int minTime = calTimeM(schedule);
-            int maxTime = calTimeP(schedule);
+        
             boolean flag = true;
             for (int j = 0; j < 7; j++) {
-                int day = (j+startday) % 7;
-                if (day == 6 || day == 0) {
-                    continue;
-                }
+                int day = (startday + j - 1) % 7 + 1;
+                if (day == 6 || day == 7) continue;
                 
-                if (timelogs[i][j] > maxTime) {
-                    System.out.println(timelogs[i][j]);
-                    flag = false;
+                // 검사 결과 지각했으면 이 직원은 cnt 생략
+                if (!check(schedules[i], timelogs[i][j])) {
+                    flag  = false;
                     break;
                 }
             }
-            if (flag) {
-                answer++;
-            }
+            
+            if (flag) cnt++;
         }
         
         
-        return answer;
-    }
-    
-    private static int calTimeP(int time) {
-        int h = time / 100;
-        int m = time % 100;
-        m += 10;
-        if (m >= 60) {
-            m -= 60;
-            h += 1;
-        }
         
-        return h*100 + m;
-    }
-    
-    private static int calTimeM(int time) {
-        int h = time / 100;
-        int m = time % 100;
-        m = 10;
-        if (m < 0) {
-            m += 60;
-            h -= 1;
-        }
-        
-        return h*100 + m;
+        return cnt;
     }
 }
+
+// 5 -> 12 -> 12 % 7 = 5
