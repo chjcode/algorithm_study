@@ -1,35 +1,65 @@
+import java.util.*;
+
 class Solution {
     public int solution(int n, int w, int num) {
-        int row = (num - 1) / w;
-        int posInRow = (num - 1) % w;
-        int col;
-        if (row % 2 == 0) {
-            col = posInRow;
-        } else {
-            col = (w - 1) - posInRow;
-        }
-
-        int totalRows = (n + w - 1) / w;
         
-        int count = 1;
+        int h = (n+w-1)/w;
+        int[][] arr = new int[h][w];
         
-        for (int r = row + 1; r < totalRows; r++) {
-            if (r != totalRows - 1) {
-                count++;
+        boolean flag = false;
+        int cnt = 1;
+        for (int i = h-1; i >= 0; i--) {
+            if (!flag) {
+                // 좌 -> 우
+                for (int j = 0; j < w; j++) {
+                    arr[i][j] = cnt;
+                    cnt++;
+                    flag = true;
+                    if (cnt > n) {
+                        break;
+                    }
+                }
             } else {
-                int lastRowBoxes = n % w == 0 ? w : n % w;
-                if (r % 2 == 0) {
-                    if (col < lastRowBoxes) {
-                        count++;
+                // 우 -> 좌
+                for (int j = w-1; j >= 0; j--) {
+                    arr[i][j] = cnt;
+                    cnt++;
+                    flag = false;
+                    if (cnt > n) {
+                        break;
                     }
-                } else {
-                    if (col >= w - lastRowBoxes) {
-                        count++;
-                    }
+                }
+            }
+            if (cnt > n) {
+                break;
+            }
+        }
+        
+        int findX = -1;
+        int findY = -1;
+        boolean find = false;
+
+        for (int i = 0; i < h && !find; i++) {
+            for (int j = 0; j < w; j++) {
+
+                if (arr[i][j] == num) {
+                    findX = i;
+                    findY = j;
+                    find = true;
+                    break;
                 }
             }
         }
         
-        return count;
+        System.out.println(findX + " " + findY);
+        
+        int answer = 0;
+        for (int i = 0; i <= findX; i++) {
+            if (arr[i][findY] != 0) {
+                answer++;
+            }
+        }
+        
+        return answer;
     }
 }
