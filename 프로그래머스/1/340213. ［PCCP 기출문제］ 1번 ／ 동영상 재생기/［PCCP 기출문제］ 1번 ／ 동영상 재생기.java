@@ -2,126 +2,80 @@ import java.util.*;
 
 class Solution {
     
-    static class Time {
-        int m;
-        int s;
-        int vid_endM;
-        int vid_endS;
-        int op_start_sec;
-        int op_end_sec;
-        int vid_end_sec;
-        Time (int m, int s, int op_startM, int op_startS, int op_endM, int op_endS, int vid_endM, int vid_endS) {
-            this.m = m;
-            this.s = s;
-            this.vid_endM = vid_endM;
-            this.vid_endS = vid_endS;
-            this.op_start_sec = op_startM * 60 + op_startS;
-            this.op_end_sec = op_endM * 60 + op_endS;
-            this.vid_end_sec = vid_endM * 60 + vid_endS;
-            System.out.println(m + ":" + s);
-        }
+    public String changeTime(int minute) {
+        StringBuilder sb = new StringBuilder();
         
-        private String getTime() {
-            StringBuilder sb = new StringBuilder();
-            String mm = Integer.toString(m);
-            String ss = Integer.toString(s);
-            if (mm.length() < 2) {
-                sb.append('0');
-            }
-            sb.append(mm).append(':');
-            if (ss.length() < 2) {
-                sb.append('0');
-            }
-            sb.append(ss);
-            return sb.toString();
-        }
-
-        private int getCurrentSeconds() {
-            return this.m * 60 + this.s;
-        }
+        int h = minute / 60;
+        int m = minute % 60;
         
-        private void next() {
-            int now = getCurrentSeconds();
-            checkOpening(now);
-            s += 10;
-            if (s >= 60) {
-                s %= 60;
-                m += 1;
-            }
-            now = getCurrentSeconds();
-            checkOpening(now);
-            now = getCurrentSeconds();
-            checkVid(now);
-            System.out.println(m + ":" + s);
+        if (h < 10) {
+            sb.append('0');
         }
+        sb.append(h);
         
-        private void prev() {
-            
-            s -= 10;
-            if (s < 0) {
-                s = (s + 60);
-                m -= 1;
-            }
-            
-            int now = getCurrentSeconds();
-            checkOpening(now);
-            now = getCurrentSeconds();
-            checkVid(now);
-            System.out.println(m + ":" + s);
-        }
+        sb.append(":");
         
-        private void checkOpening(int currentSec) {
-            if (currentSec >= op_start_sec && currentSec <= op_end_sec) {
-                this.m = op_end_sec / 60;
-                this.s = op_end_sec % 60;
-            }
+        if (m < 10) {
+            sb.append('0');
         }
+        sb.append(m);
         
-        private void checkVid(int currentSec) {
-            
-            if (currentSec < 0) {
-                setFromSeconds(0);
-            } else if (currentSec > vid_end_sec) {
-               setFromSeconds(vid_end_sec);
-            } else {
-                setFromSeconds(currentSec);
-            }
-        }
-        
-        private void setFromSeconds(int t) {
-            this.m = t / 60;
-            this.s = t % 60;
-        }
+        return sb.toString();
     }
-    public String solution(String video_len, String pos, String op_start, String op_end, String[] commands) {
+    public int changeMinute(String time) {
+        String[] s = time.split(":");
+        int minute = Integer.parseInt(s[0]) * 60 + Integer.parseInt(s[1]);
+        
+        return minute;
+        
+    }
+    public int isOpening(int nowMinute, int op_startMin, int op_endMin) {
 
-        StringTokenizer st;
-        st = new StringTokenizer(pos, ":");
-        int m = Integer.parseInt(st.nextToken());
-        int s = Integer.parseInt(st.nextToken());
-        st = new StringTokenizer(video_len, ":");
-        int vid_endM = Integer.parseInt(st.nextToken());
-        int vid_endS = Integer.parseInt(st.nextToken());
-        st = new StringTokenizer(op_start, ":");
-        int op_startM = Integer.parseInt(st.nextToken());
-        int op_startS = Integer.parseInt(st.nextToken());
-        st = new StringTokenizer(op_end, ":");
-        int op_endM = Integer.parseInt(st.nextToken());
-        int op_endS = Integer.parseInt(st.nextToken());
+        if (op_startMin <= nowMinute && nowMinute <= op_endMin) {
+            return op_endMin;
+        }
         
-        
-        Time time = new Time(m, s, op_startM, op_startS, op_endM, op_endS, vid_endM, vid_endS);
-        
-        for (String command : commands) {
-
-            if (command.equals("next")) {
-                time.next();
-            } else if (command.equals("prev")) {
-                time.prev();
+        return nowMinute;
+    }
+    
+    public int move(int minute, int vidMin, String command) {
+        if (command.equals("next")) {
+            minute += 10;
+            if (minute > vidMin) {
+                return vidMin;
             }
+            
+            return minute;
+        }
+        if (command.equals("prev")) {
+            minute -= 10;
+            if (minute < 0) {
+                return 0;
+            }
+            return minute;
+        }
+        
+        return minute;
+    }
+    
+    public String solution(String video_len, String pos, String op_start, String op_end, String[] commands) {
+        
+        // pos : 처음 위치
+        // 현재 위치가 오프닝 구간이면 자동으로 op_end로 이동
+        int vidMin = changeMinute(video_len);
+        int nowMin = changeMinute(pos);
+        int op_startMin = changeMinute(op_start);
+        int op_endMin = changeMinute(op_end);
+        
+        nowMin = isOpening(nowMin, op_startMin, op_endMin);
+        for (String command : commands) {
+            nowMin = move(nowMin, vidMin, command);
+            
+            nowMin = isOpening(nowMin, op_startMin, op_endMin);
             
         }
         
-        return time.getTime();
+        
+        return changeTime(nowMin);
     }
 }
