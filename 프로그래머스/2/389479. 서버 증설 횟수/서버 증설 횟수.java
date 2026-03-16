@@ -1,19 +1,20 @@
 class Solution {
     public int solution(int[] players, int m, int k) {
         int n = players.length;
-        int[] server = new int[n + k];
+        int[] expire = new int[n + k + 1];
+        int active = 0;
         int answer = 0;
 
         for (int i = 0; i < n; i++) {
-            int need = players[i] / m;
+            active -= expire[i];
 
-            if (server[i] < need) {
-                int add = need - server[i];
+            int need = players[i] / m;   // 여기만 고치면 됨
+
+            if (active < need) {
+                int add = need - active;
+                active += add;
                 answer += add;
-
-                for (int j = i; j < i + k; j++) {
-                    server[j] += add;
-                }
+                expire[i + k] += add;
             }
         }
 
