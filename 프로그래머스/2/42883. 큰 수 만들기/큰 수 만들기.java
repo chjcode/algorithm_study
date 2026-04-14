@@ -2,28 +2,32 @@ import java.util.*;
 
 class Solution {
     public String solution(String number, int k) {
-        Deque<Character> stack = new ArrayDeque<>();
+        StringBuilder sb = new StringBuilder();
+        
+        Deque<Character> deq = new ArrayDeque<>();
 
         for (int i = 0; i < number.length(); i++) {
-            char current = number.charAt(i);
+            char now = number.charAt(i);
 
-            while (!stack.isEmpty() && k > 0 && stack.peekLast() < current) {
-                stack.pollLast();
-                k--;
+            while (!deq.isEmpty()) {
+                if (k > 0 && deq.peekLast() < now) {
+                    deq.pollLast();
+                    k--;
+                } else {
+                    break;
+                }
             }
 
-            stack.addLast(current);
+            deq.addLast(now);
         }
 
-        // 아직 제거해야 할 개수가 남았다면 뒤에서 제거
         while (k > 0) {
-            stack.pollLast();
+            deq.pollLast();
             k--;
         }
 
-        StringBuilder sb = new StringBuilder();
-        while (!stack.isEmpty()) {
-            sb.append(stack.pollFirst());
+        while (!deq.isEmpty()) {
+            sb.append(deq.pollFirst());
         }
 
         return sb.toString();
