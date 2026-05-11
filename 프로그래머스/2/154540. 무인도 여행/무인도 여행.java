@@ -2,13 +2,16 @@ import java.util.*;
 
 class Solution {
     
-    boolean[][] visited;
     int n, m;
+    int[][] arr;
+    boolean[][] visited;
+    List<Integer> answer;
     int[] dx = {0, 0, 1, -1};
     int[] dy = {1, -1, 0, 0};
     
     class Point {
         int x, y;
+
         Point(int x, int y) {
             this.x = x;
             this.y = y;
@@ -16,58 +19,60 @@ class Solution {
     }
     
     public int[] solution(String[] maps) {
+        answer = new ArrayList<>();
+        
         n = maps.length;
         m = maps[0].length();
         
+        arr = new int[n][m];
         visited = new boolean[n][m];
-        List<Integer> list = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                arr[i][j] = maps[i].charAt(j);
+            }
+        }
         
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                if (maps[i].charAt(j) != 'X' && !visited[i][j]) {
-                    list.add(bfs(i, j, maps));
+                if (arr[i][j] != 'X' && !visited[i][j]) {
+                    bfs(i, j);
                 }
             }
         }
         
-        if (list.isEmpty()) {
-            return new int[]{-1};
+        if (answer.size() > 0) {
+            Collections.sort(answer);
+            return answer.stream().mapToInt(Integer::intValue).toArray();
         }
         
-        Collections.sort(list);
-        
-        int[] answer = new int[list.size()];
-        for (int i = 0; i < list.size(); i++) {
-            answer[i] = list.get(i);
-        }
-        
-        return answer;
+        return new int[]{-1};
     }
     
-    private int bfs(int i, int j, String[] maps) {
+    private void bfs(int x, int y) {
         Deque<Point> deq = new ArrayDeque<>();
-        deq.add(new Point(i, j));
-        visited[i][j] = true;
-        
-        int cnt = maps[i].charAt(j) - '0';
+        deq.add(new Point(x, y));
+
+        int sum = arr[x][y] - '0';
+        visited[x][y] = true;
         
         while (!deq.isEmpty()) {
-            Point now = deq.pollFirst();
+            Point now = deq.pollLast();
             
-            for (int dir = 0; dir < 4; dir++) {
-                int nx = now.x + dx[dir];
-                int ny = now.y + dy[dir];
+            for (int i = 0; i < 4; i++) {
+                int nx = now.x + dx[i];
+                int ny = now.y + dy[i];
+
+                if (nx < 0 || nx > n - 1 || ny < 0 || ny > m - 1) continue;
                 
-                if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-                
-                if (maps[nx].charAt(ny) != 'X' && !visited[nx][ny]) {
-                    cnt += maps[nx].charAt(ny) - '0';
-                    deq.addLast(new Point(nx, ny));
+                if (arr[nx][ny] != 'X' && !visited[nx][ny]) {
+                    sum += arr[nx][ny] - '0';
                     visited[nx][ny] = true;
+                    deq.add(new Point(nx, ny));
                 }
             }
         }
         
-        return cnt;
+        answer.add(sum);
     }
 }
