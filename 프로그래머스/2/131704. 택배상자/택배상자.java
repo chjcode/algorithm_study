@@ -1,23 +1,29 @@
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.*;
 
 class Solution {
     public int solution(int[] order) {
-        int n = order.length;
-        Deque<Integer> stack = new ArrayDeque<>();
-        int answer = 0;
+        Stack<Integer> stack = new Stack<>();
+        
+        int box = 1;
         int idx = 0;
-
-        for (int box = 1; box <= n; box++) {
-            stack.addLast(box);
-
-            while (!stack.isEmpty() && stack.peekLast() == order[idx]) {
-                stack.pollLast();
-                answer++;
+        int n = order.length;
+        
+        while (box <= n) {
+            if (box == order[idx]) {
+                box++;
+                idx++;
+            } 
+            else {
+                stack.push(box);
+                box++;
+            }
+            
+            while (!stack.isEmpty() && idx < n && stack.peek() == order[idx]) {
+                stack.pop();
                 idx++;
             }
         }
-
-        return answer;
+        
+        return idx;
     }
 }
